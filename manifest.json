@@ -1,0 +1,250 @@
+{
+  "main": "main.py",
+  "name": "DupeDonors",
+  "homepage": "https://github.com/xbmc4lyfe/nzbget-extension-dupe-donors",
+  "kind": "QUEUE",
+  "displayName": "Dupe Donors",
+  "version": "1.0",
+  "nzbgetMinVersion": "24",
+  "author": "xbmc4lyfe",
+  "license": "See the repository; vendor/ptt is MIT",
+  "about": "Adds health-checked duplicate postings of every new download as nzbget dupe backups.",
+  "queueEvents": "NZB_ADDED",
+  "taskTime": "",
+  "requirements": [
+    "Python 3.8 or newer.",
+    "A newznab indexer or aggregator, for example NZBHydra2.",
+    "DupeCheck=yes in nzbget's settings."
+  ],
+  "description": [
+    "When an NZB is added, Dupe Donors searches the indexer for other postings of the same release, checks how much of each still exists on your news servers, and adds the live ones under the download's DupeKey, most complete first.",
+    "If the download fails, nzbget's duplicate handling switches to the best of them. With the PR 850 build it also borrows missing articles from them.",
+    "A download whose articles exist on no server is demoted at once, so the best donor takes over."
+  ],
+  "options": [
+    {
+      "name": "HydraUrl",
+      "displayName": "HydraUrl",
+      "value": "",
+      "description": [
+        "Base URL of the newznab indexer, for example http://127.0.0.1:5076 for NZBHydra2."
+      ],
+      "select": []
+    },
+    {
+      "name": "HydraApiKey",
+      "displayName": "HydraApiKey",
+      "value": "",
+      "description": [
+        "API key of the indexer."
+      ],
+      "select": []
+    },
+    {
+      "name": "MaxDonors",
+      "displayName": "MaxDonors",
+      "value": 0,
+      "description": [
+        "Most donors to add per download. 0 means no limit."
+      ],
+      "select": [
+        0,
+        1000
+      ]
+    },
+    {
+      "name": "SizeTolerance",
+      "displayName": "SizeTolerance",
+      "value": 0,
+      "description": [
+        "0: size is not a filter (postings of one release can differ by gigabytes). 0.2: skip results more than 20% off in size."
+      ],
+      "select": []
+    },
+    {
+      "name": "HealthPercent",
+      "displayName": "HealthPercent",
+      "value": 5,
+      "description": [
+        "Share of each posting's articles to check on the news servers. 0 turns health checks off."
+      ],
+      "select": [
+        0,
+        100
+      ]
+    },
+    {
+      "name": "HealthMinArticles",
+      "displayName": "HealthMinArticles",
+      "value": 50,
+      "description": [
+        "Fewest articles to check per posting."
+      ],
+      "select": [
+        1,
+        100000
+      ]
+    },
+    {
+      "name": "HealthMaxArticles",
+      "displayName": "HealthMaxArticles",
+      "value": 1000,
+      "description": [
+        "Most articles to check per posting."
+      ],
+      "select": [
+        1,
+        100000
+      ]
+    },
+    {
+      "name": "BodyPercent",
+      "displayName": "BodyPercent",
+      "value": 20,
+      "description": [
+        "Share of the checked articles that are also downloaded and verified (yEnc CRC)."
+      ],
+      "select": [
+        0,
+        100
+      ]
+    },
+    {
+      "name": "BodyMaxPerNzb",
+      "displayName": "BodyMaxPerNzb",
+      "value": 20,
+      "description": [
+        "Most articles to download per posting. Each is about 750 KB."
+      ],
+      "select": [
+        0,
+        1000
+      ]
+    },
+    {
+      "name": "DonorMinAlive",
+      "displayName": "DonorMinAlive",
+      "value": 0.5,
+      "description": [
+        "Postings with less than this share of their articles on any server are dropped."
+      ],
+      "select": []
+    },
+    {
+      "name": "HealthBudget",
+      "displayName": "HealthBudget",
+      "value": 120,
+      "description": [
+        "Seconds of checking per posting."
+      ],
+      "select": [
+        1,
+        3600
+      ]
+    },
+    {
+      "name": "FastDonors",
+      "displayName": "FastDonors",
+      "value": 5,
+      "description": [
+        "Donors added right after a quick 10-article check. The rest are added after a full check."
+      ],
+      "select": [
+        0,
+        100
+      ]
+    },
+    {
+      "name": "NzbsToCheckConcurrently",
+      "displayName": "NzbsToCheckConcurrently",
+      "value": 10,
+      "description": [
+        "Postings checked at the same time."
+      ],
+      "select": [
+        1,
+        100
+      ]
+    },
+    {
+      "name": "NntpServerConnectionPerNzb",
+      "displayName": "NntpServerConnectionPerNzb",
+      "value": 1,
+      "description": [
+        "Connections per news server for each posting being checked."
+      ],
+      "select": [
+        1,
+        20
+      ]
+    },
+    {
+      "name": "MaxConnsPerNntpServer",
+      "displayName": "MaxConnsPerNntpServer",
+      "value": 20,
+      "description": [
+        "Most connections per news server for checks. Never more than half of the server's Connections."
+      ],
+      "select": [
+        1,
+        100
+      ]
+    },
+    {
+      "name": "PrimaryScore",
+      "displayName": "PrimaryScore",
+      "value": 1000000,
+      "description": [
+        "DupeScore given to a download without a DupeKey or with a lower score. Donors score just below it."
+      ],
+      "select": [
+        100,
+        2000000000
+      ]
+    },
+    {
+      "name": "SettleSeconds",
+      "displayName": "SettleSeconds",
+      "value": 20,
+      "description": [
+        "Seconds to wait after a download is added, so the submitter's own backups arrive first."
+      ],
+      "select": [
+        0,
+        600
+      ]
+    },
+    {
+      "name": "DryRun",
+      "displayName": "DryRun",
+      "value": "no",
+      "description": [
+        "yes: search and check, and log what would be added, without changing anything in nzbget."
+      ],
+      "select": [
+        "no",
+        "yes"
+      ]
+    },
+    {
+      "name": "StateDir",
+      "displayName": "StateDir",
+      "value": "",
+      "description": [
+        "Folder for the state file and log. Empty means MainDir/dupe-donors."
+      ],
+      "select": []
+    }
+  ],
+  "commands": [
+    {
+      "name": "ConnectionTest",
+      "action": "Test connection",
+      "displayName": "ConnectionTest",
+      "description": [
+        "Checks that the indexer answers and lists the news servers used for health checks."
+      ]
+    }
+  ],
+  "sections": []
+}
