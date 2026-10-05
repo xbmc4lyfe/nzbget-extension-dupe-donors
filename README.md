@@ -19,6 +19,7 @@ feed, or a manual upload.
 - [Scores](#scores)
 - [Limits](#limits)
 - [Develop](#develop)
+- [License](#license)
 
 ## How it works
 
@@ -195,3 +196,9 @@ To try a change without nzbget, run the connection test from a shell:
 NZBCP_COMMAND=ConnectionTest NZBPO_HydraUrl=http://127.0.0.1:5076 NZBPO_HydraApiKey=YOUR_KEY \
 NZBOP_CONTROLPORT=6789 NZBOP_CONTROLUSERNAME=nzbget NZBOP_CONTROLPASSWORD=YOUR_PASSWORD python3 main.py
 ```
+
+## License
+
+Dupe Donors is licensed under the GNU General Public License, version 2. See [LICENSE](LICENSE).
+
+The bundled `vendor/ptt/` is MIT licensed; its license is in `vendor/ptt/LICENSE`.

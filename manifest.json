@@ -7,7 +7,7 @@
   "version": "1.0",
   "nzbgetMinVersion": "24",
   "author": "xbmc4lyfe",
-  "license": "See the repository; vendor/ptt is MIT",
+  "license": "GPL-2.0",
   "about": "Adds health-checked duplicate postings of every new download as nzbget dupe backups.",
   "queueEvents": "NZB_ADDED",
   "taskTime": "",
