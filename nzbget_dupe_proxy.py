@@ -321,8 +321,10 @@ class State:
     def sent(self, key, fp):
         return self.data.get(key, {}).get("fps", {}).get(fp)
 
-    def sent_anywhere(self, fp):
-        return any(isinstance(g, dict) and fp in g.get("fps", {}) for k, g in self.data.items() if k != "_dead")
+    def nzbids_for(self, fp):
+        """NZBIDs this posting was recorded under (as a primary or a donor), in any group."""
+        return {g["fps"][fp] for k, g in self.data.items()
+                if k != "_dead" and isinstance(g, dict) and fp in g.get("fps", {})}
 
     def mark_dead(self, fp, sk):
         with self.lock:
@@ -917,8 +919,11 @@ class Proxy:
                        for x in queue + history):
             return None  # a backup or promoted duplicate: its pick was (or is) handled
         info, ambiguous = self.queued_nzb(path, auth, g)
-        if info is None or self.state.sent_anywhere(info.fingerprint):
-            return None  # unreadable, or the proxy appended it (primary or donor)
+        if info is None:
+            return None
+        if nzbid in self.state.nzbids_for(info.fingerprint):
+            log.info("watch: nzbid=%d %s was handled already (appended or searched by this proxy)", nzbid, title)
+            return None  # the same queue item again; a re-submission of the same NZB gets a new NZBID
         if not key or score < self.cfg.primary_score:  # managed here from now on: lift it to primary_score
             key = key or "dupes:" + normalize_title(title)
             for cmd, arg in (("GroupSetDupeKey", key), ("GroupSetDupeScore", str(self.cfg.primary_score)), ("GroupSetDupeMode", "SCORE")):
